@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Discover, search, track, and manage your favorite movies using the modern CineVault movie dashboard powered by TMDB." />
+  <meta name="theme-color" content="#111111" />
+  <title>CineVault — Movie Manager</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast"></div>
+
+  <!-- SEARCH OVERLAY -->
+  <div id="searchOverlay">
+    <div id="searchBox">
+      <div class="sq-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input id="overlaySearch" type="text" placeholder="Search movies…" aria-label="Search movies"
+          autocomplete="off" />
+        <button class="sq-close" id="closeSearch">✕</button>
+      </div>
+      <div id="searchResults">
+        <div class="sq-empty">Start typing to search…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#hero">CINE<span>VAULT</span></a>
+    <ul class="nav-links">
+      <li><a href="#hero" data-scroll="hero" class="active">Home</a></li>
+      <li><a href="#trending" data-scroll="trending">Trending</a></li>
+      <li><a href="#toprated" data-scroll="toprated">Top Rated</a></li>
+      <li><a href="#watchlistSection" data-scroll="watchlistSection">Watchlist</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-search-btn" id="openSearch">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        Search movies…
+      </button>
+      <button id="navSignIn" class="nav-logout-btn" style="display: block;">Sign In</button>
+      <div id="navAccount" style="display: none; align-items: center; gap: 12px; position: relative;">
+        <div id="userAvatar" class="avatar-circle" title="User Profile">
+          <span id="avatarInitials">U</span>
+        </div>
+        <div id="profileDropdown" class="profile-dropdown">
+          <div class="dropdown-header">
+            <span class="user-welcome">Welcome,</span>
+            <span id="userDisplayName" class="user-display-name">Username</span>
+            <span id="userEmail" class="user-email-text">email@example.com</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <button id="logoutBtn" class="dropdown-item logout-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-genre">Featured</div>
+      <h1 class="hero-title">The Dark Knight</h1>
+      <div class="hero-meta">
+        <span class="hero-imdb">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#1a1a1a">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          <span id="heroRating">9.0</span>
+        </span>
+        <span class="dot"></span><span class="hero-year">2008</span>
+        <span class="dot"></span><span class="hero-dur">2h 32m</span>
+      </div>
+      <p class="hero-desc">When the menace known as the Joker wreaks havoc on Gotham, Batman must accept one of the
+        greatest psychological and physical tests of his ability to fight injustice.</p>
+      <div class="hero-buttons">
+        <button class="btn-play" id="heroPlay">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          Watch Trailer
+        </button>
+        <button class="btn-watchlist" id="heroWatchlist">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+          </svg>
+          <span>Add to Watchlist</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- STATS BAR -->
+  <div id="stats-bar">
+    <div class="stat-card stat-highest">
+      <div class="stat-icon">👑</div>
+      <div class="stat-content">
+        <span class="stat-label">Highest Rated</span>
+        <span class="stat-value" id="stat-high">—</span>
+        <span class="stat-sub" id="stat-high-name"></span>
+        <button class="stat-trailer-btn" id="stat-high-btn" style="display:none">▶ Watch Trailer</button>
+      </div>
+    </div>
+    <div class="stat-card stat-lowest">
+      <div class="stat-icon">📉</div>
+      <div class="stat-content">
+        <span class="stat-label">Lowest Rated</span>
+        <span class="stat-value" id="stat-low">—</span>
+        <span class="stat-sub" id="stat-low-name"></span>
+        <button class="stat-trailer-btn" id="stat-low-btn" style="display:none">▶ Watch Trailer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="filterBar">
+    <div class="filter-chips" id="genreChips">
+      <button class="chip active" data-genre="All">All</button>
+      <button class="chip" data-genre="Action">Action</button>
+      <button class="chip" data-genre="Comedy">Comedy</button>
+      <button class="chip" data-genre="Drama">Drama</button>
+      <button class="chip" data-genre="Thriller">Thriller</button>
+      <button class="chip" data-genre="Sci-Fi">Sci-Fi</button>
+      <button class="chip" data-genre="Horror">Horror</button>
+      <button class="chip" data-genre="Romance">Romance</button>
+      <button class="chip" data-genre="Adventure">Adventure</button>
+      <button class="chip" data-genre="Animation">Animation</button>
+    </div>
+    <div class="filter-right">
+      <select id="sortSelect" class="sort-dropdown" aria-label="Sort movies by">
+        <option value="default">Sort by…</option>
+        <option value="rating-high">Highest Rated</option>
+        <option value="rating-low">Lowest Rated</option>
+        <option value="title-az">Title A–Z</option>
+        <option value="title-za">Title Z–A</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="container">
+    <!-- RIGHT -->
+    <div id="rightCol">
+      <div class="section-heading" id="trending">
+        <span class="section-icon">🔥</span>
+        <h3>Trending Movies</h3>
+        <hr class="section-line" />
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn carousel-btn-left" aria-label="Scroll left">&#8249;</button>
+        <div class="category-row" id="trendingRow"></div>
+        <button class="carousel-btn carousel-btn-right" aria-label="Scroll right">&#8250;</button>
+      </div>
+      <div class="section-heading" id="toprated">
+        <span class="section-icon">⭐</span>
+        <h3>Top Rated</h3>
+        <hr class="section-line" />
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn carousel-btn-left" aria-label="Scroll left">&#8249;</button>
+        <div class="category-row" id="topratedRow"></div>
+        <button class="carousel-btn carousel-btn-right" aria-label="Scroll right">&#8250;</button>
+      </div>
+
+      <div class="section-heading" id="action">
+        <span class="section-icon">💥</span>
+        <h3>Action</h3>
+        <hr class="section-line" />
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn carousel-btn-left" aria-label="Scroll left">&#8249;</button>
+        <div class="category-row" id="actionRow"></div>
+        <button class="carousel-btn carousel-btn-right" aria-label="Scroll right">&#8250;</button>
+      </div>
+
+      <div class="section-heading" id="comedy">
+        <span class="section-icon">🎭</span>
+        <h3>Comedy</h3>
+        <hr class="section-line" />
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn carousel-btn-left" aria-label="Scroll left">&#8249;</button>
+        <div class="category-row" id="comedyRow"></div>
+        <button class="carousel-btn carousel-btn-right" aria-label="Scroll right">&#8250;</button>
+      </div>
+
+      <div class="section-heading" id="scifi">
+        <span class="section-icon">🚀</span>
+        <h3>Sci-Fi</h3>
+        <hr class="section-line" />
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn carousel-btn-left" aria-label="Scroll left">&#8249;</button>
+        <div class="category-row" id="scifiRow"></div>
+        <button class="carousel-btn carousel-btn-right" aria-label="Scroll right">&#8250;</button>
+      </div>
+
+      <section id="continueSection" style="display:none">
+        <div class="section-heading">
+          <span class="section-icon">▶️</span>
+          <h3>Continue Watching</h3>
+          <hr class="section-line" />
+        </div>
+        <div class="category-row" id="continueRow"></div>
+      </section>
+
+      <section id="watchlistSection">
+        <div class="section-heading">
+          <span class="section-icon">🔖</span>
+          <h3>My Watchlist</h3>
+          <hr class="section-line" />
+        </div>
+        <div class="category-row" id="watchlistRow">
+          <p class="row-loading">Add movies to your watchlist to see them here.</p>
+        </div>
+      </section>
+
+      <section id="favoritesSection">
+        <div class="section-heading">
+          <span class="section-icon">❤️</span>
+          <h3>My Favorites</h3>
+          <hr class="section-line" />
+        </div>
+        <div class="category-row" id="favoritesRow">
+          <p class="row-loading">Mark movies as favourite to see them here.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Brand Info -->
+        <div class="footer-col brand-col">
+          <a class="footer-logo" href="#hero">CINE<span>VAULT</span></a>
+          <p class="footer-desc">Your ultimate hub for movies. Browse trending releases, curate your personal watchlist,
+            and keep track of your favorite films on a fully customized experience.</p>
+          <div class="social-links">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+              class="social-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+              </svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+              class="social-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="footer-col links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#trending">Trending</a></li>
+            <li><a href="#toprated">Top Rated</a></li>
+            <li><a href="#watchlistSection">My Watchlist</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources/API -->
+        <div class="footer-col links-col">
+          <h4>Metadata Powered By</h4>
+          <p class="api-partner-text">CineVault utilizes the TMDB API for fetching movies metadata, artwork, and release
+            details. All details are kept current in real-time.</p>
+          <div class="tmdb-partner-badge">
+            <svg width="120" height="16" viewBox="0 0 240 30" fill="currentColor"
+              style="color: #01b4e4; display: block; margin-top: 12px;">
+              <path
+                d="M12.964 15.655h23.013v5.612H12.964v28.277H6.969V21.267H-16V15.655h16.031V10.043h-23.013V4.431H6.969v5.612h5.995v5.612zm16.071-11.224h18.32v5.612h-18.32v18.053h-5.996V4.431zm32.842 16.848v11.224h5.995v-11.224H82.02V4.431z"
+                transform="scale(0.5)"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Developer Profile -->
+        <div class="footer-col contact-col">
+          <h4>About Developer</h4>
+          <p class="dev-bio">Built by <strong>Pranjal Sharma</strong>. Crafted as a high-performance, single-page
+            application using modern vanilla ES Modules and Firebase.</p>
+          <a href="mailto:pranjalsharma@example.com" class="footer-mail-btn">
+            Get In Touch
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 CineVault. All rights reserved. Designed for portfolios and educational demonstrations.</p>
+        <p class="footer-credit-links">
+          <a href="#">Privacy Policy</a> &middot;
+          <a href="#">Terms of Use</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOVIE DETAILS MODAL -->
+  <div id="movieModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" aria-label="Close modal">&#x2715;</button>
+
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+
+      <div class="modal-body">
+        <div class="modal-poster-col">
+          <img id="modalPoster" src="" alt="" class="modal-poster" />
+        </div>
+
+        <div class="modal-info-col">
+          <div class="modal-genre" id="modalGenre"></div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+
+          <div class="modal-meta">
+            <span id="modalRating"></span>
+            <span class="dot"></span>
+            <span id="modalYear"></span>
+            <span class="dot"></span>
+            <span id="modalRuntime"></span>
+          </div>
+
+          <p class="modal-desc" id="modalDesc"></p>
+
+          <div class="modal-credits">
+            <div><span class="credit-label">Director</span><span id="modalDirector"></span></div>
+            <div><span class="credit-label">Cast</span><span id="modalCast"></span></div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-play" id="modalTrailer">
+              &#9654; Watch Trailer
+            </button>
+            <button class="btn-watchlist" id="modalWatchlist">
+              + Watchlist
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-trailer-container" id="trailerContainer">
+        <iframe id="trailerFrame" width="100%" height="100%" frameborder="0" allowfullscreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div id="authModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-content auth-modal-content">
+      <button class="modal-close" id="authClose" aria-label="Close modal">&#x2715;</button>
+      <h2 id="authTitle" class="auth-modal-title">Sign in to CineVault</h2>
+      <form id="authForm" class="auth-form">
+        <div class="auth-input-group" id="authUsernameGroup" style="display: none;">
+          <label for="authUsername">Username</label>
+          <input type="text" id="authUsername" placeholder="Choose a username" autocomplete="username" />
+        </div>
+        <div class="auth-input-group">
+          <label for="authEmail">Email Address</label>
+          <input type="email" id="authEmail" required placeholder="name@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-input-group">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" required placeholder="••••••••" autocomplete="current-password"
+            minlength="6" />
+        </div>
+        <button type="submit" id="authSubmitBtn" class="auth-submit-btn">Log In</button>
+      </form>
+      <div class="auth-toggle">
+        Don't have an account? <a href="#" id="authToggleLink">Sign up</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+
+</html>
