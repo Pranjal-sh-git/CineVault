@@ -1,6 +1,4 @@
 # Local credentials containing sensitive keys (ignored from git)
-config.js
-js/firebase-config.js
 assets/js/config.js
 assets/js/firebase-config.js
 
