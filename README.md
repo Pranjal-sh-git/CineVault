@@ -61,10 +61,7 @@ service cloud.firestore {
 }
 ```
 
-## Known Limitations
-- No pagination — each category row shows TMDB's first 20 results
-- No request retry/timeout handling on network failure
-- Username uniqueness isn't enforced (display name only, not a login identifier)
+
 
 ## License
 MIT
