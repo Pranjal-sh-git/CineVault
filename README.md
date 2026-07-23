@@ -2,7 +2,7 @@
 
 A Netflix-style movie discovery and watchlist app built with vanilla JavaScript — real-time TMDB data, Firebase authentication, and a Firestore-backed per-user watchlist, favorites, and viewing history.
 
-**[Live Demo →](https://cinevault-movies.netlify.app/)**
+**[Live Demo →](https://cinevault-pranjal-sharma.netlify.app/)**
 
 ![CineVault Screenshot](./screenshots/hero.png)
 
